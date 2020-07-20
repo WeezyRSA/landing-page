@@ -49,7 +49,19 @@
 */
 
 // Build menu 
-
+function buildMenu() {
+  const sections = document.querySelectorAll('section')
+  let menuList = document.querySelector('#navbar__list'); 
+  console.log('test');
+  let firstLink = true;
+  for(const section of sections) {
+    let listItem = document.createElement('li');
+    listItem.innerHTML = `<a href="#${section.id}" class="menu__link ${firstLink ? "menu__link--active" : ""}" data-link="${section.dataset.nav}"> ${section.dataset.nav} </a>`;
+    menuList.appendChild(listItem);
+    firstLink = false;
+  }
+}
+buildMenu();
 // Scroll to section on link click
 
 // Set sections as active
