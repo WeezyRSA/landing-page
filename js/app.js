@@ -6,9 +6,10 @@ const sections = document.querySelectorAll("section[data-nav]");
 
 // Build menu 
 function buildMenu() {
-  const docFragment = document.createDocumentFragment();
   
   let firstLink = true;
+
+  const docFragment = document.createDocumentFragment();
   sections.forEach(section => {
     const listItem = document.createElement('li');
     const linkItem = document.createElement("a");
