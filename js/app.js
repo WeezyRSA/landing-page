@@ -25,6 +25,7 @@ function buildMenu() {
   navContainer.append(docFragment);
 }
 
+//Handle Click event
 const handleClickEvent = e => {
 
   e.preventDefault();
@@ -49,20 +50,19 @@ const handleClickEvent = e => {
   }
 };
 
+//Handle scroll event
 const handleScrollEvent = () => {
 
   if (isClicked !== true) {
 
-    const activeSection = Array.from(sections).find(section => {
+      const activeSection = Array.from(sections).find(section => {
       const topPos = section.offsetTop;
       const bottomPos = section.offsetTop + section.offsetHeight;
-      const verrOffset = window.pageYOffset + 300;
-
-      const isActiveSection = verOffset >= topPos && verrOffset <= bottomPos
+      const verOffset = window.pageYOffset + 300;
+      const isActiveSection = verOffset >= topPos && verOffset <= bottomPos
       return isActiveSection;
       
-    });
-    
+    });    
 
     Array.from(navLinks).forEach(el => el.classList.remove("active"));    
     Array.from(sections).forEach(el => el.classList.remove("active-section"));
@@ -82,6 +82,3 @@ const handleScrollEvent = () => {
 buildMenu();
 navContainer.addEventListener("click", handleClickEvent);
 document.addEventListener("scroll", handleScrollEvent);
-
-
-
