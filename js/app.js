@@ -1,69 +1,87 @@
-/**
- * 
- * Manipulating the DOM exercise.
- * Exercise programmatically builds navigation,
- * scrolls to anchors from navigation,
- * and highlights section in viewport upon scrolling.
- * 
- * Dependencies: None
- * 
- * JS Version: ES2015/ES6
- * 
- * JS Standard: ESlint
- * 
-*/
-
-/**
- * Define Global Variables
- * 
-*/
-
-
-/**
- * End Global Variables
- * Start Helper Functions
- * 
-*/
-
-
-
-/**
- * End Helper Functions
- * Begin Main Functions
- * 
-*/
-
-// build the nav
-
-
-// Add class 'active' to section when near top of viewport
-
-
-// Scroll to anchor ID using scrollTO event
-
-
-/**
- * End Main Functions
- * Begin Events
- * 
-*/
+//Define Global Variables
+const navContainer = document.querySelector("#navbar__list");
+const navLinks = navContainer.getElementsByTagName("a");
+let isClicked = false;
+const sections = document.querySelectorAll("section[data-nav]"); 
 
 // Build menu 
 function buildMenu() {
-  const sections = document.querySelectorAll('section')
-  let menuList = document.querySelector('#navbar__list'); 
-  console.log('test');
+  const docFragment = document.createDocumentFragment();
+  
   let firstLink = true;
-  for(const section of sections) {
-    let listItem = document.createElement('li');
-    listItem.innerHTML = `<a href="#${section.id}" class="menu__link ${firstLink ? "menu__link--active" : ""}" data-link="${section.dataset.nav}"> ${section.dataset.nav} </a>`;
-    menuList.appendChild(listItem);
+  sections.forEach(section => {
+    const listItem = document.createElement('li');
+    const linkItem = document.createElement("a");
+    linkItem.textContent = section.dataset.nav;
+    linkItem.classList.add("menu__link");
+    if (firstLink) {
+      linkItem.classList.add("active");
+    };
+    linkItem.setAttribute("href", `#${section.id}`);
+    listItem.appendChild(linkItem);
+    docFragment.appendChild(listItem);
     firstLink = false;
-  }
+  });
+  navContainer.append(docFragment);
 }
-buildMenu();
-// Scroll to section on link click
 
-// Set sections as active
+const handleClickEvent = e => {
+
+  e.preventDefault();
+  
+  isClicked = true;
+
+  if (e.target.nodeName === "A") {
+    
+    const target = e.target.getAttribute("href").slice(1);
+    
+    const targetSection = Array.from(sections).find(
+      section => section.id === target
+    );
+    Array.from(navLinks).forEach(el => el.classList.remove("active"));    
+    Array.from(sections).forEach(el => el.classList.remove("active-section"));
+    
+    e.target.classList.add("active");
+    targetSection.scrollIntoView({ behavior: "smooth" });
+    targetSection.classList.add("active-section");
+
+    isClicked = !isClicked;
+  }
+};
+
+const handleScrollEvent = () => {
+
+  if (isClicked !== true) {
+
+    const activeSection = Array.from(sections).find(section => {
+      const topPos = section.offsetTop;
+      const bottomPos = section.offsetTop + section.offsetHeight;
+      const verrOffset = window.pageYOffset + 300;
+
+      const isActiveSection = verOffset >= topPos && verrOffset <= bottomPos
+      return isActiveSection;
+      
+    });
+    
+
+    Array.from(navLinks).forEach(el => el.classList.remove("active"));    
+    Array.from(sections).forEach(el => el.classList.remove("active-section"));
+
+    let activeLink;
+
+    if (activeSection) {
+      activeLink = Array.from(navLinks).find(
+        anchor => anchor.getAttribute("href").slice(1) === activeSection.id
+      );
+
+      activeSection.classList.add("active-section");
+      activeLink.classList.add("active");
+    }
+  }
+};
+buildMenu();
+navContainer.addEventListener("click", handleClickEvent);
+document.addEventListener("scroll", handleScrollEvent);
+
 
 
